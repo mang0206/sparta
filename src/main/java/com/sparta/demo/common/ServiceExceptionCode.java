@@ -1,0 +1,17 @@
+package com.sparta.demo.common;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public enum ServiceExceptionCode {
+    NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
+    INSUFFICIENT_STOCK("상품의 재고가 부족합니다.");
+    // ... 다른 예외 코드들
+
+    final String message;
+}
