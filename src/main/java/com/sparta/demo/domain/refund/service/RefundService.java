@@ -40,8 +40,6 @@ public class RefundService {
             throw new IllegalStateException("'COMPLETED' 상태의 구매 건만 환불 요청할 수 있습니다.");
         }
 
-        // (비즈니스 로직 3) 이미 환불 요청/처리 중인지 확인 (중복 요청 방지)
-        // (구현 생략 - 필요시 RefundRepository에 findByPurchaseIdAndStatusNot 존재 여부 체크)
 
         Refund refund = Refund.builder()
                 .purchase(purchase)
@@ -56,35 +54,32 @@ public class RefundService {
 
     // 2. 환불 처리 API (관리자용)
     @Transactional
-    public RefundResponse processRefund(Long refundId, RefundProcessRequest request) {
+    public void processRefund(Long refundId, RefundStatus status) {
         Refund refund = refundRepository.findById(refundId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환불 ID입니다."));
 
-        RefundStatus newStatus = request.getStatus();
-        if (newStatus == RefundStatus.PENDING) {
-            throw new IllegalArgumentException("환불 상태를 PENDING으로 변경할 수 없습니다.");
+        if (status == RefundStatus.APPROVED) {
+            refund.process(RefundStatus.APPROVED);
+            // 재고 복원
+            refund.getPurchase().getPurchaseItems().forEach(item ->
+                    item.getProduct().increaseStock(item.getQuantity()));
+        } else if (status == RefundStatus.REJECTED) {
+            refund.process(RefundStatus.REJECTED);
+        } else {
+            throw new IllegalArgumentException("유효하지 않은 환불 처리 상태입니다.");
         }
-
-        // (중요) 환불 승인 시, 재고 복원
-        if (newStatus == RefundStatus.APPROVED) {
-            Purchase purchase = refund.getPurchase();
-            for (PurchaseItem item : purchase.getPurchaseItems()) {
-                // Product의 increaseStock (재고 복원)
-                item.getProduct().increaseStock(item.getQuantity());
-            }
-        }
-
-        // 환불 상태 변경 (엔티티 내부 로직 호출)
-        refund.process(newStatus);
-        // @Transactional에 의해 더티 체킹 (refund 상태, product 재고)
-
-        return new RefundResponse(refund);
     }
 
     // 3. 특정 사용자의 환불 목록 조회
-    public List<RefundResponse> getRefundsByUserId(Long userId) {
-        List<Refund> refunds = refundRepository.findByUserId(userId);
-        return refunds.stream()
+    public List<RefundResponse> getRefundsByUser(Long userId) {
+        return refundRepository.findAll().stream()
+                .filter(refund -> refund.getUser().getId().equals(userId))
+                .map(RefundResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<RefundResponse> getAllRefunds() {
+        return refundRepository.findAll().stream()
                 .map(RefundResponse::new)
                 .collect(Collectors.toList());
     }

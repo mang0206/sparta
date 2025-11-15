@@ -3,6 +3,7 @@ package com.sparta.demo.common;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
@@ -54,5 +55,13 @@ public class ApiResponse<T> {
         public static Error of(String errorCode, String errorMessage) {
             return new Error(errorCode, errorMessage);
         }
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> created(T data) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(success(data));
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> created() {
+        return ResponseEntity.status(HttpStatus.CREATED).body(success());
     }
 }

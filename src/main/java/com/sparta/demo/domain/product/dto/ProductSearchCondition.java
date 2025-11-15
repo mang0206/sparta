@@ -12,12 +12,14 @@ public class ProductSearchCondition {
     @Schema(description = "카테고리 ID", example = "1")
     private Long categoryId;
 
+    @Schema(description = "상품명", example = "마우스")
+    private String name;
+
     @Schema(description = "최소 가격", example = "10000")
     private BigDecimal minPrice;
 
     @Schema(description = "최대 가격", example = "50000")
     private BigDecimal maxPrice;
 
-    @Schema(description = "상품명 키워드", example = "마우스")
-    private String keyword;
+
 }

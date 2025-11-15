@@ -56,4 +56,9 @@ public class User {
         this.email = email;
         this.passwordHash = passwordHash;
     }
+
+    public void updateProfile(String name, String email) {
+        this.username = name;
+        this.email = email;
+    }
 }

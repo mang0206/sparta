@@ -62,4 +62,11 @@ public class ProductController {
         ProductResponse response = productService.updateProduct(productId, request);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
+    }
 }

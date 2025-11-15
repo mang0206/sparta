@@ -68,9 +68,10 @@ public class Category {
         this.description = description;
     }
 
-    public void update(String name, String description) {
+    public void update(String name, String description, Category parent) {
         this.name = name;
         this.description = description;
+        this.parent = parent;
     }
 
 }

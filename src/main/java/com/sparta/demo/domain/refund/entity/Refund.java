@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -36,11 +38,13 @@ public class Refund {
     @Column(name = "status", nullable = false)
     private RefundStatus status;
 
-    @Column(name = "requested_at", updatable = false)
-    private LocalDateTime requestedAt = LocalDateTime.now();
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @Column(name = "processed_at")
-    private LocalDateTime processedAt;
+    @Column(nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Builder
     public Refund(Purchase purchase, User user, String reason, RefundStatus status) {
@@ -56,6 +60,5 @@ public class Refund {
             throw new IllegalStateException("이미 처리된 환불 요청입니다.");
         }
         this.status = newStatus;
-        this.processedAt = LocalDateTime.now();
     }
 }

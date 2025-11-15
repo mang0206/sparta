@@ -96,14 +96,14 @@ public class PurchaseService {
 
     // 4. 구매 취소 (재고 복원)
     @Transactional
-    public PurchaseResponse cancelPurchase(Long purchaseId) { // cancelOrder -> cancelPurchase
+    public PurchaseResponse cancelPurchase(Long purchaseId) {
         Purchase purchase = findPurchaseById(purchaseId);
 
         if (purchase.getStatus() != PurchaseStatus.PENDING) {
             throw new IllegalStateException("PENDING 상태의 구매만 취소할 수 있습니다.");
         }
 
-        for (PurchaseItem item : purchase.getPurchaseItems()) { // getOrderItems -> getPurchaseItems
+        for (PurchaseItem item : purchase.getPurchaseItems()) {
             item.getProduct().increaseStock(item.getQuantity());
         }
 

@@ -17,6 +17,9 @@ public class CategoryRequest {
     @Schema(description = "카테고리 설명", example = "가전, 모바일, PC 등")
     private String description;
 
+    @Schema(description = "부모 카테고리 ID", example = "1")
+    private Long parentId;
+
     // DTO to Entity
     public Category toEntity() {
         return Category.builder()

@@ -45,4 +45,11 @@ public class CategoryController {
         CategoryResponse response = categoryService.updateCategory(categoryId, request);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "카테고리 삭제", description = "카테고리를 삭제합니다.")
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.noContent().build();
+    }
 }

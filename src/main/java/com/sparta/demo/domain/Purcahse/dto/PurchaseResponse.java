@@ -27,13 +27,13 @@ public class PurchaseResponse {
     @Schema(description = "구매 상품 목록")
     private List<PurchaseItemResponse> items;
 
-    public PurchaseResponse(Purchase purchase) { // Order -> Purchase
+    public PurchaseResponse(Purchase purchase) {
         this.purchaseId = purchase.getId();
         this.userId = purchase.getUser().getId();
         this.status = purchase.getStatus();
         this.totalPrice = purchase.getTotalPrice();
         this.createdAt = purchase.getCreatedAt();
-        this.items = purchase.getPurchaseItems().stream() // getOrderItems -> getPurchaseItems
+        this.items = purchase.getPurchaseItems().stream()
                 .map(PurchaseItemResponse::new)
                 .collect(Collectors.toList());
     }

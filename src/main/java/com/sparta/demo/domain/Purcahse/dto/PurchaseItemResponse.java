@@ -17,12 +17,12 @@ public class PurchaseItemResponse {
     private int quantity;
 
     @Schema(description = "구매 시점 가격")
-    private BigDecimal priceAtPurchase; // priceAtOrder -> priceAtPurchase
+    private BigDecimal price; // priceAtOrder -> priceAtPurchase
 
     public PurchaseItemResponse(PurchaseItem item) { // OrderItem -> PurchaseItem
         this.productId = item.getProduct().getId();
         this.productName = item.getProduct().getName();
         this.quantity = item.getQuantity();
-        this.priceAtPurchase = item.getPrice(); // '구매' 시점 가격
+        this.price = item.getPrice(); // '구매' 시점 가격
     }
 }

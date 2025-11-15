@@ -9,11 +9,9 @@ import com.sparta.demo.domain.product.dto.ProductResponse;
 import com.sparta.demo.domain.product.dto.ProductSearchCondition;
 import com.sparta.demo.domain.product.entity.Product;
 import com.sparta.demo.domain.product.repository.ProductRepository;
-import com.sparta.demo.domain.product.repository.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +49,7 @@ public class ProductService {
     }
 
     // 2-2. 상품 목록 조회 (검색 및 필터링)
-    public Page<ProductResponse> searchProducts(ProductSearchCondition condition, Pageable pageable) {
+    /*public Page<ProductResponse> searchProducts(ProductSearchCondition condition, Pageable pageable) {
         // Specification 생성
         Specification<Product> spec = ProductSpecification.search(condition);
 
@@ -60,6 +58,10 @@ public class ProductService {
 
         // Page<Product> -> Page<ProductResponse>
         return productPage.map(ProductResponse::new);
+    }*/
+    // 2-2. 상품 목록 조회 (검색 및 필터링)
+    public Page<ProductResponse> searchProducts(ProductSearchCondition condition, Pageable pageable) {
+        return productRepository.searchProducts(condition, pageable);
     }
 
     // 3. 상품 수정
@@ -87,4 +89,22 @@ public class ProductService {
 
         return new ProductResponse(product);
     }
+
+    // 4. 상품 삭제
+    @Transactional
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품 ID입니다."));
+
+        // 연관된 주문 상태 확인 (COMPLETED 상태인 경우 삭제 불가)
+        boolean hasCompletedOrders = product.getPurchaseItems().stream()
+                .anyMatch(item -> item.getPurchase().getStatus() == com.sparta.demo.domain.Purcahse.entity.PurchaseStatus.COMPLETED);
+
+        if (hasCompletedOrders) {
+            throw new IllegalStateException("완료된 주문이 있는 상품은 삭제할 수 없습니다.");
+        }
+
+        productRepository.delete(product);
+    }
+
 }

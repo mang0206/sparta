@@ -8,7 +8,8 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductSpecification {
+//QueryDsl 사용으로 미사용 클래스
+public class _ProductSpecification {
 
     public static Specification<Product> search(ProductSearchCondition condition) {
         return (root, query, cb) -> {
@@ -29,8 +30,8 @@ public class ProductSpecification {
             }
 
             // 3. 상품명 키워드 (Like 검색)
-            if (StringUtils.hasText(condition.getKeyword())) {
-                predicates.add(cb.like(root.get("name"), "%" + condition.getKeyword() + "%"));
+            if (StringUtils.hasText(condition.getName())) {
+                predicates.add(cb.like(root.get("name"), "%" + condition.getName() + "%"));
             }
 
             // 모든 조건을 AND로 결합

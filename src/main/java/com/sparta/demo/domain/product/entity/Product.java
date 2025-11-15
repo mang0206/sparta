@@ -1,6 +1,7 @@
 package com.sparta.demo.domain.product.entity;
 
 import com.sparta.demo.domain.Purcahse.entity.Purchase;
+import com.sparta.demo.domain.Purcahse.entity.PurchaseItem;
 import com.sparta.demo.domain.category.entity.Category;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -56,7 +57,7 @@ public class Product {
     LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product")
-    private List<Purchase> purchases = new ArrayList<>();
+    private List<PurchaseItem> purchaseItems = new ArrayList<>();
 
     @Builder
     public Product(
