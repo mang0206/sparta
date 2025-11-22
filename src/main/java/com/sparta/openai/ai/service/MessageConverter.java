@@ -15,10 +15,10 @@ public class MessageConverter {
     /**
      * OpenAI 형식 메시지를 Spring AI Message로 변환
      */
-    public List<org.springframework.ai.chat.messages.Message> convertToSpringAI(
-            List<Message> openAIMessages) {
+    public List<org.springframework.ai.chat.messages.Message> toSpringMessages(
+            List<Message> messages) {
 
-        return openAIMessages.stream()
+        return messages.stream()
                 .map(msg -> {
                     switch (msg.role().toLowerCase()) {
                         case "system":
@@ -34,26 +34,11 @@ public class MessageConverter {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Spring AI Message를 OpenAI 형식으로 변환
-     */
-    public Message convertFromSpringAI(org.springframework.ai.chat.messages.Message springMessage) {
-        String role;
-        if (springMessage instanceof SystemMessage) {
-            role = "system";
-        } else if (springMessage instanceof UserMessage) {
-            role = "user";
-        } else if (springMessage instanceof AssistantMessage) {
-            role = "assistant";
-        } else {
-            role = "assistant";
-        }
-
-        return Message.builder()
-                .role(role)
-                //.content(springMessage.getContent())
-                .content(springMessage.getText())
-                .build();
+    private org.springframework.ai.chat.messages.Message toSpringMessage(Message m) {
+        return switch (m.role()) {
+            case "system" -> new SystemMessage(m.content());
+            case "assistant" -> new AssistantMessage(m.content());
+            default -> new UserMessage(m.content()); // 기본 user
+        };
     }
-
 }

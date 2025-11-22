@@ -8,5 +8,11 @@ public record Usage(
         //@JsonProperty("total_tokens")
         Integer totalTokens
 ) {
-
+    public static Usage of(int promptTokens, int completionTokens) {
+        return new Usage(
+                promptTokens,
+                completionTokens,
+                promptTokens + completionTokens
+        );
+    }
 }
