@@ -12,14 +12,22 @@ import java.util.List;
 @Service
 public class ChatService {
     private final ChatClient chatClient;
+    private final MessageConverter messageConverter;
 
-    public ChatService(ChatClient chatClient) {
+    public ChatService(ChatClient chatClient, MessageConverter messageConverter) {
         this.chatClient = chatClient;
+        this.messageConverter = messageConverter;
     }
 
     public ChatResponse chat(ChatRequest request) {
-        List<Message> messages =
-                messageConverter.convertToSpringAI(request.getMessages());
+        List<Message> messages = messageConverter.convertToSpringAI(request.messages());
+
+        var aiResponse = chatClient.prompt()
+                .messages(messages)
+                .call();
+
+        String content = aiResponse.content();
+        return ChatResponse.of(request.model(), content);
     }
 }
 

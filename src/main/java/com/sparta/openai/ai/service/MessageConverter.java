@@ -1,7 +1,9 @@
 package com.sparta.openai.ai.service;
 
-
-import com.sparta.openai.ai.controller.dto.myMessage;
+import com.sparta.openai.ai.controller.dto.Message;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.messages.*;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,7 @@ public class MessageConverter {
      * OpenAI 형식 메시지를 Spring AI Message로 변환
      */
     public List<org.springframework.ai.chat.messages.Message> convertToSpringAI(
-            List<myMessage> openAIMessages) {
+            List<Message> openAIMessages) {
 
         return openAIMessages.stream()
                 .map(msg -> {
@@ -49,7 +51,8 @@ public class MessageConverter {
 
         return Message.builder()
                 .role(role)
-                .content(springMessage.getContent())
+                //.content(springMessage.getContent())
+                .content(springMessage.getText())
                 .build();
     }
 

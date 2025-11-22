@@ -3,26 +3,26 @@ package com.sparta.openai.ai.controller.dto;
 import lombok.Builder;
 
 @Builder
-public record myMessage(
+public record Message(
         String role,
         String content
 ) {
-    public static myMessage system(String content) {
-        return myMessage.builder()
+    public static Message system(String content) {
+        return Message.builder()
                 .role("system")
                 .content(content)
                 .build();
     }
 
-    public static myMessage user(String content) {
-        return myMessage.builder()
+    public static Message user(String content) {
+        return Message.builder()
                 .role("user")
                 .content(content)
                 .build();
     }
 
-    public static myMessage assistant(String content) {
-        return myMessage.builder()
+    public static Message assistant(String content) {
+        return Message.builder()
                 .role("assistant")
                 .content(content)
                 .build();
