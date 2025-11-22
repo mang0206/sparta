@@ -6,7 +6,9 @@ import com.sparta.openai.ai.controller.dto.Usage;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
+import java.util.UUID;
 import java.util.List;
 
 @Service
