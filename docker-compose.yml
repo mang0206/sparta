@@ -1,0 +1,66 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: postgres
+    environment:
+      POSTGRES_DB: teamsparta_vector
+      POSTGRES_USER: rtan
+      POSTGRES_PASSWORD: sparta
+      # 추가 설정
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - D:/docker/postgres/data:/var/lib/postgresql/data #disk 공간이 부족하여 외장하드에 volume 설정....
+      - ./src/main/resources/static/init-db:/docker-entrypoint-initdb.d
+      # - postgres_data:/var/lib/postgresql/data
+    command: postgres -c shared_preload_libraries=vector
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - D:/docker/ollama:/root/.ollama
+    restart: unless-stopped
+
+  # 모델 자동 설치 (한 번만 실행)
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: ollama-init
+    depends_on:
+      - ollama
+    command: >
+      -c "
+        sleep 10 &&
+        ollama pull qwen2.5:3b &&
+        echo 'Setup qwen2.5:3b completed!'
+        ollama pull nomic-embed-text:latest &&
+        echo 'Setup nomic-embed-text completed!'
+      "
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    restart: "no"
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - open-webui:/app/backend/data
+    ports:
+      - "3030:8080"
+    environment:
+      - OPENAI_API_BASE_URL=http://host.docker.internal:8080/v1
+      - OPENAI_API_KEY=
+      ##- OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    extra_hosts:
+      - host.docker.internal:host-gateway # 도커 컨테이너가 로컬호스트(Spring Boot)에 접근하기 위함
+    restart: unless-stopped
+
+volumes:
+  open-webui: {}

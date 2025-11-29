@@ -28,6 +28,7 @@ dependencies {
 
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
+    implementation 'org.flywaydb:flyway-database-postgresql'
 
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 
@@ -53,6 +54,26 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation platform('org.springframework.ai:spring-ai-bom:1.1.0-M2')
+    implementation 'org.springframework.ai:spring-ai-starter-model-anthropic'
+
+    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
+
+    // Spring AI Vector Store
+    implementation 'org.springframework.ai:spring-ai-pgvector-store'
+
+    // Jackson (JSON 처리)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // MCP Client (외부 MCP Server와 연결)
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
+
+    // 선택사항: MCP Server 직접 구현 (WebMVC)
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {
