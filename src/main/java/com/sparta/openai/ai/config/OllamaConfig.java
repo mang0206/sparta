@@ -1,4 +1,4 @@
-package com.sparta.openai.global.config;
+package com.sparta.openai.ai.config;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 @Slf4j
 @Configuration
@@ -38,7 +37,7 @@ public class OllamaConfig {
     /**
      * OllamaChatModel 생성
      */
-    @Primary
+
     @Bean(name = "ollamaChatModel")
     public OllamaChatModel ollamaChatModel(
             OllamaApi ollamaApi) {
@@ -67,7 +66,6 @@ public class OllamaConfig {
     /**
      * Ollama ChatClient 생성
      */
-    @Primary  // 기본 ChatClient로 사용
     @Bean(name = "ollamaChatClient")
     public ChatClient ollamaChatClient(
             @Qualifier("ollamaChatModel") OllamaChatModel chatModel) {

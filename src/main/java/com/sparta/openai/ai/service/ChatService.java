@@ -6,20 +6,43 @@ import com.sparta.openai.ai.controller.dto.ChatChunk;
 import com.sparta.openai.ai.controller.dto.ChatRequest;
 import com.sparta.openai.ai.controller.dto.ChatResponse;
 import com.sparta.openai.ai.controller.dto.Usage;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.Message;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatService {
     private final ChatClient chatClient;
     private final MessageConverter messageConverter;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final Map<String, ChatClient> allChatClients; // Set<ChatClient> -> Spring이 자동으로 ChatClient Type Bean Set 주입해줘요.
+    private Map<String, ChatClient> chatClientMap = new HashMap<>();
+    private final Map<String, List<Message>> conversations = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    public void init() {
+        chatClientMap = allChatClients.entrySet().stream()
+                .collect(toMap(
+                        element -> element.getKey().split("ChatClient")[0],
+                        Map.Entry::getValue
+                ));
+        log.info("=== Initialized chat clients: {} ===", chatClientMap.keySet());
+    }
 
     public ChatResponse chatSync(ChatRequest chatRequest) {
         // 1. Message DTO → Spring AI Message로 변환
@@ -41,6 +64,9 @@ public class ChatService {
         int completionTokens = content != null ? content.length() / 4 : 0;
 
         Usage usage = Usage.of(promptTokens, completionTokens);
+
+        log.info("=== content: {} ===", content);
+        log.info("=== totalTokens: {} ===", usage.totalTokens());
 
         return ChatResponse.of(
                 chatRequest.model(),
