@@ -24,11 +24,13 @@ public class ChatController {
 
     @GetMapping("/models")
     public ResponseEntity<ModelsResponse> getModels() {
+        log.info("Request received for /v1/models");
         return ResponseEntity.ok(chatService.models());
     }
 
     @PostMapping("/chat/completions")
     public ResponseEntity<?> chatCompletions(@RequestBody ChatRequest request) {
+        log.info("Request received for /v1/chat/completions: model={}", request.model());
         if (Boolean.TRUE.equals(request.stream())) {
             Flux<ServerSentEvent<String>> eventStream = chatService.chatStream(request)
                     .map(data -> ServerSentEvent.builder(data).build());

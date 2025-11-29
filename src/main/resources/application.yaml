@@ -3,7 +3,7 @@ spring:
     import: optional:file:.env[.properties]
   ai:
     anthropic:
-      api-key: ${ANTHROPIC_API_KEY}
+      api-key: ${ANTHROPIC_API_KEY:dummy}
       chat:
         options:
           model: claude-sonnet-4-5-20250929  # or claude-opus-4.1
