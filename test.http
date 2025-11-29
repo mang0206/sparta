@@ -1,4 +1,44 @@
 ###
+ curl -X POST http://host.docker.internal:8080/v1/chat/completions
+  -H "Content-Type: application/json"
+  -d '{"model": "ollama", "messages": [{"role": "user", "content": "도커 연결 테스트"}], "stream": false}'
+###
+POST http://host.docker.internal:8080/v1/chat/completions
+Content-Type: application/json
+
+{
+  "model": "ollama",
+  "messages": [
+    {
+      "role": "user",
+      "content": "도커 연결 테스트"
+    }
+  ],
+  "stream": false
+}
+
+###
+
+
+POST http://host.docker.internal:8080/v1/chat/completions
+Content-Type: application/json
+
+{
+  "model": "ollama",
+  "messages": [
+    {
+      "role": "user",
+      "content": "도커 연결 테스트"
+    }
+  ],
+  "stream": false
+}
+
+###
+
+
+
+###
 POST http://localhost:8080/v1/chat/completions
 Content-Type: application/json
 
