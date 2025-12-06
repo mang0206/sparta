@@ -25,3 +25,48 @@ Content-Type: application/json
 GET http://localhost:8080/api/users/logout
 
 
+### 1. 카테고리 추가
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "전자제품",
+  "parentCategoryId": null
+}
+
+### 2. 카테고리 조회
+GET http://localhost:8080/api/categories
+Content-Type: application/json
+
+### 3. 상품 추가
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "name": "맥북 프로",
+  "description": "최신형 맥북 프로입니다.",
+  "price": 2500000,
+  "stock": 10
+}
+
+### 4. 상품 조회
+GET http://localhost:8080/api/products
+Content-Type: application/json
+
+### 5. 장바구니 담기
+POST http://localhost:8080/api/cart
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 1
+}
+
+### 6. 장바구니 조회
+GET http://localhost:8080/api/cart
+Content-Type: application/json
+
+### 7. 장바구니 삭제
+DELETE http://localhost:8080/api/cart/1
+Content-Type: application/json
