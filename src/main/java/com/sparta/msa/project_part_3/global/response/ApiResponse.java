@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
 
+  String message;
   Error error;
   T data;
 
