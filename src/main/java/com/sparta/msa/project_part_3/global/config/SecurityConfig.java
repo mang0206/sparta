@@ -36,22 +36,28 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
+        // CSRF 보호 비활성화 (REST API는 Stateless하므로 보통 비활성화)
         .csrf(AbstractHttpConfigurer::disable)
+        // SecurityContext 저장소 설정 (HttpSession을 사용하도록 설정)
         .securityContext(context -> context
             .securityContextRepository(securityContextRepository())
         )
+        // 세션 관리 설정
         .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .maximumSessions(1)
-            .maxSessionsPreventsLogin(false)
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요 시 세션 생성
+            .maximumSessions(1) // 동시 접속 가능 세션 수 제한
+            .maxSessionsPreventsLogin(false) // 기존 세션 만료 (false) vs 신규 로그인 차단 (true)
         )
+        // 요청 권한 설정
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers(SECURITY_EXCLUDE_PATHS).permitAll()
-            .requestMatchers("/api/**").hasRole("USER")
-            .anyRequest().authenticated()
+            .requestMatchers(SECURITY_EXCLUDE_PATHS).permitAll() // 인증 제외 경로
+            .requestMatchers("/api/**").hasRole("USER") // /api/** 경로는 USER 권한 필요
+            .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
         )
+        // 폼 로그인 및 HTTP Basic 인증 비활성화 (JSON 기반 인증 사용 예정)
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
+        // 예외 처리 설정
         .exceptionHandling(ex -> ex
             .authenticationEntryPoint((request, response, authException) -> {
               response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

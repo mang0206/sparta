@@ -38,7 +38,7 @@ public class UserService {
     public void registration(RegistrationRequest request) {
         boolean exists = userRepository.existsByEmail(request.getEmail());
         if (exists) {
-            //DomainExeptioncode에 이미 존재하는 email 코드 추가
+            throw new DomainException(DomainExceptionCode.DUPLICATE_EMAIL);
         }
 
         userRepository.save(User.builder()
@@ -76,12 +76,10 @@ public class UserService {
 
     public LoginResponse getLoginInfo(Authentication authentication) {
         try {
-            Object principal = authentication.getPrincipal();
-            Long userId = (Long) principal.getClass().getMethod("getUserId").invoke(principal);
-            String email = (String) principal.getClass().getMethod("getEmail").invoke(principal);
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return LoginResponse.builder()
-                    .userId(userId)
-                    .email(email)
+                    .userId(userDetails.getUserId())
+                    .email(userDetails.getEmail())
                     .build();
         } catch (Exception e) {
             throw new DomainException(DomainExceptionCode.NOT_FOUND_USER);
