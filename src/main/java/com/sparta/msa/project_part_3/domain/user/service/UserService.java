@@ -38,7 +38,7 @@ public class UserService {
     public void registration(RegistrationRequest request) {
         boolean exists = userRepository.existsByEmail(request.getEmail());
         if (exists) {
-            //DomainExeptioncode에 이미 존재하는 email 코드 추가
+            throw new DomainException(DomainExceptionCode.DUPLICATE_EMAIL);
         }
 
         userRepository.save(User.builder()
