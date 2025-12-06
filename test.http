@@ -1,27 +1,190 @@
-###
+### [0] 초기화 및 회원가입 (홍길동)
 POST http://localhost:8080/api/users/registration
 Content-Type: application/json
 
 {
   "name": "홍길동",
-  "phone": "010-1234-7654",
+  "phone": "010-1234-5678",
   "email": "honggile@sparta.kr",
-  "password": 12341234,
+  "password": "Password123!",
   "gender": "MALE"
 }
-###
+
+### [1] 로그인
 POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-    "email": "honggile@sparta.kr",
-    "password": 12341234
+  "email": "honggile@sparta.kr",
+  "password": "12341234"
 }
-###
+
+
+### [1-1] 로그인 상태 확인
 GET http://localhost:8080/api/users/status
 Content-Type: application/json
 
-###
+### ==================================================================
+### [2] 카테고리 구성 (계층 구조)
+### ==================================================================
+
+### 2-1. 대분류 생성: 전자제품 (ID: 1 예상)
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "전자제품",
+  "parentCategoryId": null
+}
+
+### 2-2. 대분류 생성: 의류 (ID: 2 예상)
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "의류",
+  "parentCategoryId": null
+}
+
+### 2-3. 소분류 생성: 컴퓨터 (부모: 전자제품, ID: 3 예상)
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "컴퓨터/노트북",
+  "parentCategoryId": 1
+}
+
+### 2-4. 소분류 생성: 스마트폰 (부모: 전자제품, ID: 4 예상)
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "스마트폰",
+  "parentCategoryId": 1
+}
+
+### 2-5. 소분류 생성: 상의 (부모: 의류, ID: 5 예상)
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "남성 상의",
+  "parentCategoryId": 2
+}
+
+### 2-6. 전체 카테고리 조회 (트리 구조 확인)
+GET http://localhost:8080/api/categories
+Content-Type: application/json
+
+### ==================================================================
+### [3] 상품 등록 (다양한 가격과 카테고리)
+### ==================================================================
+
+### 3-1. 맥북 프로 등록 (카테고리: 컴퓨터 ID 3)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 3,
+  "name": "맥북 프로 16인치",
+  "description": "M3 Max 칩셋 탑재 최강 성능 노트북",
+  "price": 3500000,
+  "stock": 10
+}
+
+### 3-2. 아이폰 15 등록 (카테고리: 스마트폰 ID 4)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 4,
+  "name": "아이폰 15 Pro",
+  "description": "티타늄 바디, 가벼워진 무게",
+  "price": 1550000,
+  "stock": 50
+}
+
+### 3-3. 갤럭시 S24 등록 (카테고리: 스마트폰 ID 4)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 4,
+  "name": "갤럭시 S24 Ultra",
+  "description": "AI 기능이 탑재된 최고의 안드로이드 폰",
+  "price": 1690000,
+  "stock": 30
+}
+
+### 3-4. 오버핏 티셔츠 등록 (카테고리: 의류-상의 ID 5)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "categoryId": 5,
+  "name": "무지 오버핏 반팔티",
+  "description": "편안하게 입기 좋은 기본 티셔츠",
+  "price": 15000,
+  "stock": 100
+}
+
+### 3-5. 전체 상품 조회
+GET http://localhost:8080/api/products
+Content-Type: application/json
+
+### ==================================================================
+### [4] 장바구니 시나리오 (담기 -> 조회 -> 수정 -> 삭제)
+### ==================================================================
+
+### 4-1. 장바구니 담기: 맥북 1개
+POST http://localhost:8080/api/cart
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 1
+}
+
+### 4-2. 장바구니 담기: 아이폰 2개
+POST http://localhost:8080/api/cart
+Content-Type: application/json
+
+{
+  "productId": 2,
+  "quantity": 2
+}
+
+### 4-3. 장바구니 담기: 티셔츠 5개
+POST http://localhost:8080/api/cart
+Content-Type: application/json
+
+{
+  "productId": 4,
+  "quantity": 5
+}
+
+### 4-4. 장바구니 조회 (총 3종류 상품 확인)
+GET http://localhost:8080/api/cart
+Content-Type: application/json
+
+### 4-5. 장바구니 수량 변경: 아이폰 2개 -> 5개로 변경 (PUT)
+PUT http://localhost:8080/api/cart/2
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### 4-6. 장바구니 상품 삭제: 티셔츠 삭제 (상품ID 4)
+DELETE http://localhost:8080/api/cart/2
+Content-Type: application/json
+
+### 4-7. 최종 장바구니 확인
+GET http://localhost:8080/api/cart
+Content-Type: application/json
+
+### ==================================================================
+### [5] 로그아웃
+### ==================================================================
 GET http://localhost:8080/api/users/logout
-
-

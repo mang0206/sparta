@@ -49,11 +49,11 @@ public class CartService {
     }
 
     @Transactional
-    public void updateQuantity(Long userId, CartItemRequest request) {
-        CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, request.getProductId())
+    public void updateQuantity(Long userId, Long productId, int quantity) {
+        CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId)
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.CART_ITEM_NOT_FOUND));
 
-        cartItem.changeQuantity(request.getQuantity());
+        cartItem.changeQuantity(quantity);
     }
 
     @Transactional

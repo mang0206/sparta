@@ -1,6 +1,7 @@
 package com.sparta.msa.project_part_3.domain.cart.controller;
 
 import com.sparta.msa.project_part_3.domain.cart.dto.request.CartItemRequest;
+import com.sparta.msa.project_part_3.domain.cart.dto.request.UpdateCartItemRequest;
 import com.sparta.msa.project_part_3.domain.cart.dto.response.CartItemResponse;
 import com.sparta.msa.project_part_3.domain.cart.service.CartService;
 import com.sparta.msa.project_part_3.global.exception.DomainException;
@@ -41,11 +42,16 @@ public class CartController {
         return ApiResponse.ok(cartService.getItems(userId));
     }
 
-    @PutMapping
-    public ApiResponse<Void> updateQuantity(@Valid @RequestBody CartItemRequest request,
-                                            Authentication authentication) {
+    @PutMapping("/{productId}")
+    public ApiResponse<Void> updateQuantity(
+            @PathVariable Long productId,
+            @Valid @RequestBody UpdateCartItemRequest request,
+            Authentication authentication) {
+
         Long userId = extractUserId(authentication);
-        cartService.updateQuantity(userId, request);
+
+        cartService.updateQuantity(userId, productId, request.getQuantity());
+
         return ApiResponse.ok();
     }
 
