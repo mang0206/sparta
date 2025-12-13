@@ -1,0 +1,28 @@
+### 쿠폰 생성 및 대량 발급
+POST http://localhost:8080/coupons
+Content-Type: application/json
+
+{
+  "name": "오프라인 행사 쿠폰",
+  "discount": 5000,
+  "count": 10
+}
+
+### 쿠폰 등록 (유효한 코드 - UUID는 위 응답에서 복사해야 함)
+# 위 요청을 보내고 DB나 로그에서 코드를 확인하여 아래 couponCode에 넣어야 합니다.
+POST http://localhost:8080/coupons/issuance
+Content-Type: application/json
+
+{
+  "couponCode": "REPLACE_WITH_ACTUAL_UUID",
+  "userId": 1
+}
+
+### 쿠폰 등록 (잘못된 코드)
+POST http://localhost:8080/coupons/issuance
+Content-Type: application/json
+
+{
+  "couponCode": "INVALID-CODE",
+  "userId": 1
+}
