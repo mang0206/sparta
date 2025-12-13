@@ -1,0 +1,48 @@
+### 1. 쿠폰 생성 (정액 할인)
+POST http://localhost:8080/coupons
+Content-Type: application/json
+
+{
+  "couponName": "신규 가입 1000원 할인",
+  "discountType": "FIXED",
+  "discountValue": 1000,
+  "minOrderAmount": 5000,
+  "startDate": "2024-01-01T00:00:00",
+  "endDate": "2025-12-31T23:59:59",
+  "usageLimit": 100
+}
+
+### 2. 쿠폰 생성 (정률 할인)
+POST http://localhost:8080/coupons
+Content-Type: application/json
+
+{
+  "couponName": "여름 맞이 10% 할인",
+  "discountType": "PERCENTAGE",
+  "discountValue": 10,
+  "minOrderAmount": 10000,
+  "maxDiscountAmount": 5000,
+  "startDate": "2024-06-01T00:00:00",
+  "endDate": "2025-08-31T23:59:59",
+  "usageLimit": 50
+}
+
+### 3. 쿠폰 목록 조회 (활성 상태)
+GET http://localhost:8080/coupons?isActive=true&page=0&size=10
+
+### 4. 쿠폰 목록 조회 (전체)
+GET http://localhost:8080/coupons?page=0&size=10
+
+### 5. 쿠폰 단건 조회
+GET http://localhost:8080/coupons/1
+
+### 6. 상품별 최대 할인율 조회 (가정: 상품 ID 1번이 존재해야 함)
+# 먼저 상품을 생성하거나 존재하는 ID를 사용해야 함.
+# 여기서는 테스트 실행 전에 데이터가 없으면 실패할 수 있음.
+GET http://localhost:8080/products/1/max-discount
+
+### 7. 쿠폰 삭제 (논리적 삭제)
+DELETE http://localhost:8080/coupons/1
+
+### 8. 삭제 확인 (다시 조회)
+GET http://localhost:8080/coupons/1
