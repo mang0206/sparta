@@ -1,8 +1,8 @@
 package com.sparta.msa.project_part_3.domain.coupon.controller;
 
-import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequestDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponSearchCondition;
-import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponseDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponse;
 import com.sparta.msa.project_part_3.domain.coupon.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,17 +20,17 @@ public class CouponController {
     private final CouponService couponService;
 
     @PostMapping
-    public ResponseEntity<CouponResponseDto> createCoupon(@Valid @RequestBody CouponRequestDto requestDto) {
+    public ResponseEntity<CouponResponse> createCoupon(@Valid @RequestBody CouponRequest requestDto) {
         return ResponseEntity.ok(couponService.createCoupon(requestDto));
     }
 
     @GetMapping("/{couponId}")
-    public ResponseEntity<CouponResponseDto> getCoupon(@PathVariable Long couponId) {
+    public ResponseEntity<CouponResponse> getCoupon(@PathVariable Long couponId) {
         return ResponseEntity.ok(couponService.getCoupon(couponId));
     }
 
     @GetMapping
-    public ResponseEntity<Page<CouponResponseDto>> getCoupons(
+    public ResponseEntity<Page<CouponResponse>> getCoupons(
             @ModelAttribute CouponSearchCondition condition,
             @PageableDefault(size = 10) Pageable pageable) {
         return ResponseEntity.ok(couponService.getCoupons(condition, pageable));

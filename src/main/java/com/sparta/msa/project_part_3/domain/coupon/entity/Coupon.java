@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,13 +31,13 @@ public class Coupon {
     private DiscountType discountType;
 
     @Column(name = "discount_value", nullable = false)
-    private Long discountValue;
+    private BigDecimal discountValue;
 
     @Column(name = "min_order_amount", nullable = false)
-    private Long minOrderAmount;
+    private BigDecimal minOrderAmount;
 
     @Column(name = "max_discount_amount")
-    private Long maxDiscountAmount;
+    private BigDecimal maxDiscountAmount;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
@@ -54,7 +55,7 @@ public class Coupon {
     private Integer usedCount;
 
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
@@ -65,11 +66,11 @@ public class Coupon {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Coupon(String couponName, DiscountType discountType, Long discountValue, Long minOrderAmount, Long maxDiscountAmount, LocalDateTime startDate, LocalDateTime endDate, Integer usageLimit) {
+    public Coupon(String couponName, DiscountType discountType, BigDecimal discountValue, BigDecimal minOrderAmount, BigDecimal maxDiscountAmount, LocalDateTime startDate, LocalDateTime endDate, Integer usageLimit) {
         this.couponName = couponName;
         this.discountType = discountType;
         this.discountValue = discountValue;
-        this.minOrderAmount = minOrderAmount != null ? minOrderAmount : 0L;
+        this.minOrderAmount = minOrderAmount != null ? minOrderAmount : BigDecimal.ZERO;
         this.maxDiscountAmount = maxDiscountAmount;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -84,7 +85,7 @@ public class Coupon {
     }
 
     public boolean isValid(LocalDateTime now) {
-        return !isDeleted &&
+        return Boolean.FALSE.equals(isDeleted) &&
                 (now.isEqual(startDate) || now.isAfter(startDate)) &&
                 (now.isEqual(endDate) || now.isBefore(endDate)) &&
                 (usageLimit == 0 || usedCount < usageLimit);

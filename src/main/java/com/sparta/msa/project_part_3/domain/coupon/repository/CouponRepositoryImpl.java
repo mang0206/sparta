@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
     @Override
     public List<Coupon> findActiveCouponsForProduct(long productPrice) {
         LocalDateTime now = LocalDateTime.now();
+        BigDecimal price = BigDecimal.valueOf(productPrice);
 
         return queryFactory
                 .selectFrom(coupon)
@@ -57,7 +59,7 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
                         coupon.isDeleted.isFalse(),
                         coupon.startDate.loe(now),
                         coupon.endDate.goe(now),
-                        coupon.minOrderAmount.loe(productPrice),
+                        coupon.minOrderAmount.loe(price),
                         // usageLimit == 0 OR usageLimit > usedCount
                         coupon.usageLimit.eq(0).or(coupon.usageLimit.gt(coupon.usedCount))
                 )

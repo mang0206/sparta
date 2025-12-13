@@ -10,12 +10,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CouponRequestDto {
+public class CouponRequest {
 
     @NotBlank(message = "쿠폰 이름은 필수입니다.")
     String couponName;
@@ -24,12 +25,12 @@ public class CouponRequestDto {
     DiscountType discountType;
 
     @Min(value = 1, message = "할인 값은 0보다 커야 합니다.")
-    Long discountValue;
+    BigDecimal discountValue;
 
     @Min(value = 0, message = "최소 주문 금액은 0 이상이어야 합니다.")
-    Long minOrderAmount;
+    BigDecimal minOrderAmount;
 
-    Long maxDiscountAmount;
+    BigDecimal maxDiscountAmount;
 
     @NotNull(message = "시작 날짜는 필수입니다.")
     LocalDateTime startDate;

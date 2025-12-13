@@ -1,6 +1,6 @@
 package com.sparta.msa.project_part_3.domain.coupon.controller;
 
-import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponseDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponse;
 import com.sparta.msa.project_part_3.domain.coupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public class ProductDiscountController {
     private final CouponService couponService;
 
     @GetMapping("/products/{productId}/max-discount")
-    public ResponseEntity<CouponResponseDto> getMaxDiscountForProduct(@PathVariable Long productId) {
-        CouponResponseDto response = couponService.getMaxDiscountForProduct(productId);
+    public ResponseEntity<CouponResponse> getMaxDiscountForProduct(@PathVariable Long productId) {
+        CouponResponse response = couponService.getMaxDiscountForProduct(productId);
         if (response == null) {
             return ResponseEntity.noContent().build();
         }

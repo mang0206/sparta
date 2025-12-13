@@ -1,21 +1,21 @@
 package com.sparta.msa.project_part_3.domain.coupon.service;
 
-import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequestDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponSearchCondition;
-import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponseDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponse;
 import com.sparta.msa.project_part_3.domain.coupon.entity.Coupon;
 import com.sparta.msa.project_part_3.domain.coupon.entity.DiscountType;
 import com.sparta.msa.project_part_3.domain.coupon.repository.CouponRepository;
 import com.sparta.msa.project_part_3.domain.product.entity.Product;
 import com.sparta.msa.project_part_3.domain.product.repository.ProductRepository;
+import com.sparta.msa.project_part_3.global.exception.DomainException;
+import com.sparta.msa.project_part_3.global.exception.DomainExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,10 +27,10 @@ public class CouponService {
     private final ProductRepository productRepository; // For product price lookup
 
     @Transactional
-    public CouponResponseDto createCoupon(CouponRequestDto requestDto) {
+    public CouponResponse createCoupon(CouponRequest requestDto) {
         if (requestDto.getDiscountType() == DiscountType.PERCENTAGE) {
-            if (requestDto.getDiscountValue() > 100) {
-                 throw new IllegalArgumentException("할인율은 100%를 초과할 수 없습니다.");
+            if (requestDto.getDiscountValue().intValue() > 100) {
+                throw new DomainException(DomainExceptionCode.INVALID_COUPON_DISCOUNT_RATE);
             }
         }
 
@@ -45,36 +45,37 @@ public class CouponService {
                 .usageLimit(requestDto.getUsageLimit())
                 .build();
 
-        return new CouponResponseDto(couponRepository.save(coupon));
+        Coupon savedCoupon = couponRepository.save(coupon);
+        return CouponResponse.from(savedCoupon);
     }
 
-    public CouponResponseDto getCoupon(Long couponId) {
+    public CouponResponse getCoupon(Long couponId) {
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+                .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_COUPON));
 
-        if (coupon.isDeleted()) {
-             throw new IllegalArgumentException("존재하지 않는 쿠폰입니다.");
+        if (Boolean.TRUE.equals(coupon.getIsDeleted())) {
+            throw new DomainException(DomainExceptionCode.NOT_FOUND_COUPON);
         }
 
-        return new CouponResponseDto(coupon);
+        return CouponResponse.from(coupon);
     }
 
-    public Page<CouponResponseDto> getCoupons(CouponSearchCondition condition, Pageable pageable) {
+    public Page<CouponResponse> getCoupons(CouponSearchCondition condition, Pageable pageable) {
         return couponRepository.search(condition, pageable)
-                .map(CouponResponseDto::new);
+                .map(CouponResponse::from);
     }
 
     @Transactional
     public void deleteCoupon(Long couponId) {
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+                .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_COUPON));
         coupon.delete();
     }
 
     // 상품에 적용 가능한 최대 할인율(금액)을 가진 쿠폰 찾기
-    public CouponResponseDto getMaxDiscountForProduct(Long productId) {
+    public CouponResponse getMaxDiscountForProduct(Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_PRODUCT));
 
         long productPrice = product.getPrice().longValue();
 
@@ -90,16 +91,16 @@ public class CouponService {
         for (Coupon coupon : activeCoupons) {
             long currentDiscountAmount = 0;
             if (coupon.getDiscountType() == DiscountType.FIXED) {
-                currentDiscountAmount = coupon.getDiscountValue();
+                currentDiscountAmount = coupon.getDiscountValue().longValue();
             } else {
-                currentDiscountAmount = (productPrice * coupon.getDiscountValue()) / 100;
-                if (coupon.getMaxDiscountAmount() != null && currentDiscountAmount > coupon.getMaxDiscountAmount()) {
-                    currentDiscountAmount = coupon.getMaxDiscountAmount();
+                currentDiscountAmount = (productPrice * coupon.getDiscountValue().longValue()) / 100;
+                if (coupon.getMaxDiscountAmount() != null && currentDiscountAmount > coupon.getMaxDiscountAmount().longValue()) {
+                    currentDiscountAmount = coupon.getMaxDiscountAmount().longValue();
                 }
             }
 
             if (currentDiscountAmount > productPrice) {
-                 currentDiscountAmount = productPrice;
+                currentDiscountAmount = productPrice;
             }
 
             if (currentDiscountAmount > maxDiscountAmount) {
@@ -117,6 +118,6 @@ public class CouponService {
 
         if (bestCoupon == null) return null;
 
-        return new CouponResponseDto(bestCoupon);
+        return CouponResponse.from(bestCoupon);
     }
 }
