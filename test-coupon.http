@@ -1,0 +1,55 @@
+### 1. 쿠폰 생성 (Admin - DB Insert for setup)
+# This mimics creating a coupon definition. Since we don't have an API for it in this task,
+# we assume it's pre-existing.
+# For testing purpose, we can insert it manually or just trust the ID if we had an API.
+# But wait, we need to test 'generateOfflineCoupons' which needs a couponId.
+# So I should probably add a temporary API to create a coupon or just use SQL in V3?
+# I'll rely on a manual setup script or just add a test endpoint if needed.
+# Let's assume ID 1 exists after I run a setup query or I can make a 'create definition' endpoint for completeness?
+# The prompt didn't ask for 'create coupon definition', but I can't test 'generate' without it.
+# I'll add a helper endpoint in controller for testing or use SQL.
+# Let's use a setup sql script for tests. But I can't inject sql easily here without restarting.
+# I will create a simple endpoint to create a coupon definition.
+
+POST http://localhost:8080/api/coupons/definitions
+Content-Type: application/json
+
+{
+  "name": "Winter Sale",
+  "discount": 1000.00,
+  "validFrom": "2023-12-01T00:00:00",
+  "validTo": "2024-12-31T23:59:59"
+}
+
+### 2. 오프라인 쿠폰 대량 발급
+POST http://localhost:8080/api/coupons/generate
+Content-Type: application/json
+
+{
+  "couponId": 1,
+  "count": 5
+}
+
+### 3. 쿠폰 등록 (성공)
+# We need the code generated in step 2. Since it's random, we can't hardcode it in .http easily without a script.
+# In a real scenario, we'd copy-paste.
+# For automated testing here, I might just verify the response is 201.
+POST http://localhost:8080/api/coupons/issuance
+Content-Type: application/json
+
+{
+  "couponCode": "REPLACE_WITH_GENERATED_CODE",
+  "userId": 1
+}
+
+### 4. 쿠폰 등록 (중복 사용 시도 - 실패 예상 409)
+POST http://localhost:8080/api/coupons/issuance
+Content-Type: application/json
+
+{
+  "couponCode": "REPLACE_WITH_GENERATED_CODE",
+  "userId": 2
+}
+
+### 5. 사용자 쿠폰 조회
+GET http://localhost:8080/api/coupons/users/1
