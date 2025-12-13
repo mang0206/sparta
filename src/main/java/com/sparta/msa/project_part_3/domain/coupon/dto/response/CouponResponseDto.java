@@ -1,26 +1,29 @@
-package com.sparta.msa.project_part_3.domain.coupon.dto;
+package com.sparta.msa.project_part_3.domain.coupon.dto.response;
 
 import com.sparta.msa.project_part_3.domain.coupon.entity.Coupon;
 import com.sparta.msa.project_part_3.domain.coupon.entity.DiscountType;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CouponResponseDto {
-    private final Long id;
-    private final String couponName;
-    private final DiscountType discountType;
-    private final Long discountValue;
-    private final Long minOrderAmount;
-    private final Long maxDiscountAmount;
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
-    private final Integer usageLimit;
-    private final Integer issueCount;
-    private final Integer usedCount;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    final Long id;
+    final String couponName;
+    final DiscountType discountType;
+    final Long discountValue;
+    final Long minOrderAmount;
+    final Long maxDiscountAmount;
+    final LocalDateTime startDate;
+    final LocalDateTime endDate;
+    final Integer usageLimit;
+    final Integer issueCount;
+    final Integer usedCount;
+    final LocalDateTime createdAt;
+    final LocalDateTime updatedAt;
 
     public CouponResponseDto(Coupon coupon) {
         this.id = coupon.getId();

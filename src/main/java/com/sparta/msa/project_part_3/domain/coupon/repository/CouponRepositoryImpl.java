@@ -2,7 +2,7 @@ package com.sparta.msa.project_part_3.domain.coupon.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponSearchCondition;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponSearchCondition;
 import com.sparta.msa.project_part_3.domain.coupon.entity.Coupon;
 import com.sparta.msa.project_part_3.domain.coupon.entity.QCoupon;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.sparta.msa.project_part_3.domain.coupon.controller;
 
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponResponseDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponseDto;
 import com.sparta.msa.project_part_3.domain.coupon.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

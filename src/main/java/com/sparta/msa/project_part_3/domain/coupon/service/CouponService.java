@@ -1,8 +1,8 @@
 package com.sparta.msa.project_part_3.domain.coupon.service;
 
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponRequestDto;
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponResponseDto;
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponSearchCondition;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequestDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponSearchCondition;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponseDto;
 import com.sparta.msa.project_part_3.domain.coupon.entity.Coupon;
 import com.sparta.msa.project_part_3.domain.coupon.entity.DiscountType;
 import com.sparta.msa.project_part_3.domain.coupon.repository.CouponRepository;
@@ -51,6 +51,11 @@ public class CouponService {
     public CouponResponseDto getCoupon(Long couponId) {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+
+        if (coupon.isDeleted()) {
+             throw new IllegalArgumentException("존재하지 않는 쿠폰입니다.");
+        }
+
         return new CouponResponseDto(coupon);
     }
 

@@ -1,8 +1,8 @@
 package com.sparta.msa.project_part_3.domain.coupon.controller;
 
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponRequestDto;
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponResponseDto;
-import com.sparta.msa.project_part_3.domain.coupon.dto.CouponSearchCondition;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequestDto;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponSearchCondition;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponseDto;
 import com.sparta.msa.project_part_3.domain.coupon.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
