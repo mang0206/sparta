@@ -1,8 +1,11 @@
 package com.sparta.msa.project_part_3.domain.coupon.controller;
 
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRegistrationRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponSearchCondition;
+import com.sparta.msa.project_part_3.domain.coupon.dto.request.OfflineCouponRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponse;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponUserResponse;
 import com.sparta.msa.project_part_3.domain.coupon.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/coupons")
@@ -22,6 +27,21 @@ public class CouponController {
     @PostMapping
     public ResponseEntity<CouponResponse> createCoupon(@Valid @RequestBody CouponRequest requestDto) {
         return ResponseEntity.ok(couponService.createCoupon(requestDto));
+    }
+
+    @PostMapping("/generate")
+    public ResponseEntity<List<CouponUserResponse>> createOfflineCoupons(@Valid @RequestBody OfflineCouponRequest requestDto) {
+        return ResponseEntity.ok(couponService.createOfflineCoupons(requestDto));
+    }
+
+    @PostMapping("/Issuance")
+    public ResponseEntity<CouponUserResponse> registerOfflineCoupon(@RequestBody CouponRegistrationRequest requestDto) {
+        return ResponseEntity.ok(couponService.registerOfflineCoupon(requestDto));
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<CouponUserResponse>> getUserCoupons(@PathVariable Long userId) {
+        return ResponseEntity.ok(couponService.getUserCoupons(userId));
     }
 
     @GetMapping("/{couponId}")
