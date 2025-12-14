@@ -25,7 +25,10 @@ public enum DomainExceptionCode {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
 
-    CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니에 상품이 존재하지 않습니다.")
+    CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니에 상품이 존재하지 않습니다."),
+
+    NOT_FOUND_COUPON(HttpStatus.NOT_FOUND, "존재하지 않는 쿠폰입니다."),
+    INVALID_COUPON_DISCOUNT_RATE(HttpStatus.BAD_REQUEST, "할인율은 100%를 초과할 수 없습니다.")
   ;
 
   final HttpStatus status;
