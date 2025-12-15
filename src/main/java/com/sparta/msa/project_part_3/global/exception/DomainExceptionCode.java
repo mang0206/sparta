@@ -28,7 +28,8 @@ public enum DomainExceptionCode {
     CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니에 상품이 존재하지 않습니다."),
 
     NOT_FOUND_COUPON(HttpStatus.NOT_FOUND, "존재하지 않는 쿠폰입니다."),
-    INVALID_COUPON_DISCOUNT_RATE(HttpStatus.BAD_REQUEST, "할인율은 100%를 초과할 수 없습니다.")
+    INVALID_COUPON_DISCOUNT_RATE(HttpStatus.BAD_REQUEST, "할인율은 100%를 초과할 수 없습니다."),
+    ALREADY_USED_COUPON(HttpStatus.CONFLICT, "이미 사용되었거나 발급된 쿠폰입니다.")
   ;
 
   final HttpStatus status;

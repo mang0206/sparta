@@ -59,4 +59,18 @@ public class UserController {
         return ApiResponse.ok();
     }
 
+    public static Long extractUserId(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
+            throw new DomainException(DomainExceptionCode.NOT_FOUND_USER);
+        }
+
+        try {
+            Object principal = authentication.getPrincipal();
+            return (Long) principal.getClass().getMethod("getUserId").invoke(principal);
+        } catch (Exception e) {
+            throw new DomainException(DomainExceptionCode.NOT_FOUND_USER);
+        }
+    }
+
 }
