@@ -10,6 +10,7 @@ import com.sparta.msa.project_part_3.domain.product.repository.ProductRepository
 import com.sparta.msa.project_part_3.global.exception.DomainException;
 import com.sparta.msa.project_part_3.global.exception.DomainExceptionCode;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class CartService {
     }
 
     @Transactional
-    public void updateQuantity(Long userId, Long productId, int quantity) {
+    public void updateQuantity(Long userId, UUID productId, int quantity) {
         CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId)
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.CART_ITEM_NOT_FOUND));
 
@@ -57,7 +58,7 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteItem(Long userId, Long productId) {
+    public void deleteItem(Long userId, UUID productId) {
         CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId)
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.CART_ITEM_NOT_FOUND));
 

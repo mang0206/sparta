@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
@@ -39,7 +41,7 @@ public class ProductController {
   }
 
   @PutMapping("/{productId}")
-  public ApiResponse<Void> update(@PathVariable Long productId,
+  public ApiResponse<Void> update(@PathVariable UUID productId,
       @Valid @RequestBody ProductRequest request) {
     productService.update(productId, request);
     return ApiResponse.ok();
@@ -47,7 +49,7 @@ public class ProductController {
 
   @DeleteMapping("/{productId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public ApiResponse<Void> delete(@PathVariable Long productId) {
+  public ApiResponse<Void> delete(@PathVariable UUID productId) {
     productService.delete(productId);
     return ApiResponse.ok();
   }

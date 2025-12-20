@@ -82,7 +82,7 @@ public class CouponService {
     }
 
     // 상품에 적용 가능한 최대 할인율(금액)을 가진 쿠폰 찾기
-    public CouponResponse getMaxDiscountForProduct(Long productId) {
+    public CouponResponse getMaxDiscountForProduct(UUID productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_PRODUCT));
 

@@ -2,15 +2,11 @@ package com.sparta.msa.project_part_3.domain.product.entity;
 
 import com.sparta.msa.project_part_3.domain.category.entity.Category;
 import com.sparta.msa.project_part_3.global.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,8 +29,8 @@ import org.springframework.util.StringUtils;
 public class Product extends BaseEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+  @Column(updatable = false, nullable = false, columnDefinition = "UUID")
+  UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
@@ -48,18 +44,23 @@ public class Product extends BaseEntity {
 
   Integer stock;
 
+  Long externalProductId;
+
   @Builder
   public Product(
       Category category,
       String name,
       String description,
       BigDecimal price,
-      Integer stock) {
+      Integer stock,
+      Long externalProductId) {
+    this.id = UUID.randomUUID();
     this.category = category;
     this.name = name;
     this.description = description;
     this.price = price;
     this.stock = stock;
+    this.externalProductId = externalProductId;
   }
 
   public void setCategory(Category category) {
@@ -90,5 +91,11 @@ public class Product extends BaseEntity {
     if (!ObjectUtils.isEmpty(stock)) {
       this.stock = stock;
     }
+  }
+
+  public void setExternalProductId(Long externalProductId) {
+      if (!ObjectUtils.isEmpty(externalProductId)) {
+        this.externalProductId = externalProductId;
+      }
   }
 }

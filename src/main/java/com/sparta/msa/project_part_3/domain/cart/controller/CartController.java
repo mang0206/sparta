@@ -9,6 +9,8 @@ import com.sparta.msa.project_part_3.global.exception.DomainExceptionCode;
 import com.sparta.msa.project_part_3.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,7 +48,7 @@ public class CartController {
 
     @PutMapping("/{productId}")
     public ApiResponse<Void> updateQuantity(
-            @PathVariable Long productId,
+            @PathVariable UUID productId,
             @Valid @RequestBody UpdateCartItemRequest request,
             Authentication authentication) {
 
@@ -58,7 +60,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{productId}")
-    public ApiResponse<Void> deleteItem(@PathVariable Long productId,
+    public ApiResponse<Void> deleteItem(@PathVariable UUID productId,
                                         Authentication authentication) {
         Long userId = extractUserId(authentication);
         cartService.deleteItem(userId, productId);

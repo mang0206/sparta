@@ -15,7 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -44,7 +49,7 @@ public class ProductService {
   }
 
   @Transactional
-  public void update(Long productId, ProductRequest request) {
+  public void update(UUID productId, ProductRequest request) {
     Product product = getProduct(productId);
     Category category = getCategory(request.getCategoryId());
 
@@ -56,14 +61,14 @@ public class ProductService {
   }
 
   @Transactional
-  public void delete(Long productId) {
+  public void delete(UUID productId) {
     if (!productRepository.existsById(productId)) {
       throw new DomainException(DomainExceptionCode.NOT_FOUND_PRODUCT);
     }
     productRepository.deleteById(productId);
   }
 
-  private Product getProduct(Long productId) {
+  private Product getProduct(UUID productId) {
     return productRepository.findById(productId)
         .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_PRODUCT));
   }
@@ -71,6 +76,22 @@ public class ProductService {
   private Category getCategory(Long categoryId) {
     return categoryRepository.findById(categoryId)
         .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_CATEGORY));
+  }
+
+  @Transactional
+  public void savePageData(List<Product> exturnalProducts) {
+      for (Product exturnalProduct : exturnalProducts) {
+          Optional<Product> externalProduct = productRepository.findByExternalProductId(exturnalProduct.getExternalProductId());
+
+          if (externalProduct.isPresent()) {
+              Product product = externalProduct.get();
+              product.setCategory(exturnalProduct.getCategory());
+              product.setPrice(exturnalProduct.getPrice());
+              product.setStock(exturnalProduct.getStock());
+          } else {
+              productRepository.save(exturnalProduct);
+          }
+      }
   }
 
 }

@@ -1,0 +1,7 @@
+ALTER TABLE product
+    MODIFY COLUMN id VARCHAR(36) NOT NULL COMMENT '상품 ID',
+    ADD COLUMN external_product_id BIGINT NULL COMMENT '외부 상품 ID' AFTER id;
+
+
+ALTER TABLE cart
+    MODIFY COLUMN product_id VARCHAR(36) NOT NULL COMMENT '상품 ID';

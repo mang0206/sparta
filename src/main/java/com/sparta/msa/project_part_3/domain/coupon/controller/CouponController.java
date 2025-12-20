@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.sparta.msa.project_part_3.domain.user.controller.UserController.extractUserId;
 
@@ -51,7 +52,7 @@ public class CouponController {
     }
 
     @GetMapping("/products/{productId}/max-discount")
-    public ResponseEntity<CouponResponse> getMaxDiscountForProduct(@PathVariable Long productId) {
+    public ResponseEntity<CouponResponse> getMaxDiscountForProduct(@PathVariable UUID productId) {
         CouponResponse response = couponService.getMaxDiscountForProduct(productId);
         if (response == null) {
             return ResponseEntity.noContent().build();
