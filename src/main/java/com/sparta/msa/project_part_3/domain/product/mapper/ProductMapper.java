@@ -11,12 +11,14 @@ import org.springframework.data.domain.Page;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-  @Mapping(target = "category.id", source = "category.id")
-  @Mapping(target = "category.name", source = "category.name")
+  @Mapping(target = "categoryId", source = "category.id")
+  @Mapping(target = "categoryName", source = "category.name")
+  @Mapping(target = "isOrderable", expression = "java(product.getStock() != null && product.getStock() > 0)")
   ProductResponse toResponse(Product product);
 
   @Mapping(target = "category", source = "category")
   @Mapping(target = "name", source = "request.name")
+  @Mapping(target = "externalProductId", ignore = true)
   Product toEntity(ProductRequest request, Category category);
 
   default Page<ProductResponse> toResponsePage(Page<Product> products) {

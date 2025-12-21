@@ -3,6 +3,7 @@ package com.sparta.msa.project_part_3.domain.product.service;
 import com.sparta.msa.project_part_3.domain.category.entity.Category;
 import com.sparta.msa.project_part_3.domain.category.repository.CategoryRepository;
 import com.sparta.msa.project_part_3.domain.product.dto.request.ProductRequest;
+import com.sparta.msa.project_part_3.domain.product.dto.request.ProductSearchCondition;
 import com.sparta.msa.project_part_3.domain.product.dto.response.ProductResponse;
 import com.sparta.msa.project_part_3.domain.product.entity.Product;
 import com.sparta.msa.project_part_3.domain.product.mapper.ProductMapper;
@@ -33,13 +34,23 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public PageResult<ProductResponse> findProductByPageable(Pageable pageable) {
-    Page<Product> products = productRepository.findAllWithCategory(pageable);
+      Page<Product> products = productRepository.findAllWithCategory(pageable);
 
-    Page<ProductResponse> responses = productMapper.toResponsePage(products);
+      Page<ProductResponse> responses = products.map(ProductResponse::of);
 
-    return PageResult.<ProductResponse>builder()
-        .page(responses)
-        .build();
+      return PageResult.<ProductResponse>builder()
+              .page(responses)
+              .build();
+  }
+
+    @Transactional(readOnly = true)
+    public PageResult<ProductResponse> searchProducts(ProductSearchCondition condition, Pageable pageable) {
+        Page<Product> products = productRepository.searchProducts(condition, pageable);
+        Page<ProductResponse> responses = products.map(ProductResponse::of);
+
+        return PageResult.<ProductResponse>builder()
+            .page(responses)
+            .build();
   }
 
   @Transactional

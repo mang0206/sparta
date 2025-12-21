@@ -44,6 +44,7 @@ public class Product extends BaseEntity {
 
   Integer stock;
 
+  @Column(unique = true)
   Long externalProductId;
 
   @Builder
