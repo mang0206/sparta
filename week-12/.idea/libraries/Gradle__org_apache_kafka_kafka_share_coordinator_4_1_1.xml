@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.kafka:kafka-share-coordinator:4.1.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.apache.kafka" artifactId="kafka-share-coordinator" version="4.1.1" baseVersion="4.1.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.kafka/kafka-share-coordinator/4.1.1/eed38c6dba008d378cfa24f8d9212ece225a56bd/kafka-share-coordinator-4.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

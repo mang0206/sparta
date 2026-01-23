@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-data-jpa:4.1.0-M1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-data-jpa" version="4.1.0-M1" baseVersion="4.1.0-M1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-data-jpa/4.1.0-M1/13694cc052e0a8ad069365f06b7a9a1ef86fb362/spring-boot-data-jpa-4.1.0-M1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-webmvc-test:4.1.0-M1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-webmvc-test" version="4.1.0-M1" baseVersion="4.1.0-M1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc-test/4.1.0-M1/1f0864b4d76f0efa76e7cd4af8bb9242803ea3d9/spring-boot-webmvc-test-4.1.0-M1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
