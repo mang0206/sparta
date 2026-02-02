@@ -19,7 +19,7 @@
 ```
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
 │             │      │             │      │             │      │             │
-│  API Server │ ⇄    │   MySQL     │  →   │    Kafka    │  →   │Elasticsearch│
+│  API Server │ ⇄   │   MySQL     │  →   │    Kafka    │  →   │Elasticsearch│
 │ Spring Boot │      │             │      │             │      │             │
 └─────────────┘      └─────────────┘      └─────────────┘      └─────────────┘
 ```
@@ -166,11 +166,9 @@ Elasticsearch (External)
 
 ### ✅ 게시물 생성/수정/삭제
 - MySQL 트랜잭션 커밋 후 Kafka 이벤트 발행
-- `@TransactionalEventListener` 활용
 
 ### ✅ Elasticsearch Consumer
 - Kafka 이벤트 구독하여 Elasticsearch 색인 실시간 동기화
-- `@KafkaListener` 활용
 
 ### ✅ 단순 조회
 - MySQL 직접 쿼리 (ID 조회, 목록 조회, 페이징)
