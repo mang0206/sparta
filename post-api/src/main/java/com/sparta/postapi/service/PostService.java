@@ -21,34 +21,34 @@ public class PostService {
     private final PostRepository postRepository;
 
     @Transactional
-    public Long createPost(PostCreateRequest request) {
+    public Post createPost(PostCreateRequest request) {
         Post post = Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .authorId(request.getAuthorId())
                 .build();
 
-        Post savedPost = postRepository.save(post);
-
-        return savedPost.getId();
+        return postRepository.save(post);
     }
 
     @Transactional
-    public Long updatePost(Long id, PostUpdateRequest request) {
+    public Post updatePost(Long id, PostUpdateRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new DomainException(ErrorCode.POST_NOT_FOUND));
 
         post.update(request.getTitle(), request.getContent());
 
-        return post.getId();
+        return post;
     }
 
     @Transactional
-    public void deletePost(Long id) {
+    public Post deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new DomainException(ErrorCode.POST_NOT_FOUND));
 
         post.delete();
+
+        return post;
     }
 
     public PostResponse getPost(Long id) {

@@ -3,6 +3,11 @@ package com.sparta.postapi.controller;
 import com.sparta.postapi.dto.PostCreateRequest;
 import com.sparta.postapi.dto.PostResponse;
 import com.sparta.postapi.dto.PostUpdateRequest;
+import com.sparta.postapi.entity.Post;
+import com.sparta.postapi.event.PostCreatedEvent;
+import com.sparta.postapi.event.PostDeletedEvent;
+import com.sparta.postapi.event.PostEventPublisher;
+import com.sparta.postapi.event.PostUpdatedEvent;
 import com.sparta.postapi.global.response.ApiResponse;
 import com.sparta.postapi.global.response.PageResponse;
 import com.sparta.postapi.service.PostService;
@@ -19,22 +24,27 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
+    private final PostEventPublisher postEventPublisher;
 
     @PostMapping
     public ApiResponse<Long> createPost(@Valid @RequestBody PostCreateRequest request) {
-        Long postId = postService.createPost(request);
-        return ApiResponse.success(postId);
+        Post post = postService.createPost(request);
+        postEventPublisher.handlePostCreated(PostCreatedEvent.from(post));
+
+        return ApiResponse.success(post.getId());
     }
 
     @PutMapping("/{id}")
     public ApiResponse<Long> updatePost(@PathVariable Long id, @Valid @RequestBody PostUpdateRequest request) {
-        Long postId = postService.updatePost(id, request);
-        return ApiResponse.success(postId);
+        Post post = postService.updatePost(id, request);
+        postEventPublisher.handlePostUpdated(PostUpdatedEvent.from(post));
+        return ApiResponse.success(post.getId());
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
+        Post post = postService.deletePost(id);
+        postEventPublisher.handlePostDeleted(PostDeletedEvent.from(post));
         return ApiResponse.success(null);
     }
 
