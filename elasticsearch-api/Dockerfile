@@ -10,7 +10,6 @@ COPY settings.gradle .
 COPY src src
 RUN chmod +x ./gradlew && \
     sed -i 's/\r$//' ./gradlew
-
 # 빌드
 RUN ./gradlew bootJar --no-daemon
 
@@ -22,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 
 # 포트 노출
-EXPOSE 8080
+EXPOSE 8081
 
 # 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "app.jar"]

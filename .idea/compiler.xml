@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="sparta-msa-final-project.post-api.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="sparta-msa-final-project.elastic-api.main" target="17" />
+      <module name="sparta-msa-final-project.elastic-api.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="post-api" options="-parameters" />
+      <module name="post-api.main" options="-parameters" />
+      <module name="post-api.test" options="-parameters" />
+      <module name="sparta-msa-final-project.elastic-api.main" options="-parameters" />
+      <module name="sparta-msa-final-project.elastic-api.test" options="-parameters" />
+      <module name="sparta-msa-final-project.post-api" options="-parameters" />
+      <module name="sparta-msa-final-project.post-api.main" options="-parameters" />
+      <module name="sparta-msa-final-project.post-api.test" options="-parameters" />
+    </option>
+  </component>
+</project>
