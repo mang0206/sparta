@@ -127,6 +127,46 @@ services:
       - sns-network
     restart: always
 
+  # Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    container_name: sns-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    depends_on:
+      - elasticsearch
+    networks:
+      - sns-network
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sns-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - sns-network
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sns-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - sns-network
+      
 networks:
   sns-network:
     driver: bridge
